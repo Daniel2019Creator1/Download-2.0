@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta author="Daniel Shively">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title class="title" value="[-{WORKING}-(DOWNLOAD)-{2.0}-]">[-{WORKING}-(DOWNLOAD)-{2.0}-]</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://fontawesome.com/v4.7.0/icons">
+        <link rel="stylesheet" href="https://fontawesome.com/v4.7.0/icon/download">
+        <link rel="stylesheet" href="https://fontawesome.com/v4.7.0/icon/stop-circle-o">
+        <link rel="stylesheet" href="https://fontawesome.com/v4.7.0/icon/play-circle-o">
+        <link rel="stylesheet" href="https://fontawesome.com/v4.7.0/icon/pause-circle-o">
+        <link rel="stylesheet" href="https://fontawesome.com/v4.7.0/icon/refresh">
+        <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+    </head>
+    <body>
+        <section>
+            <div id="innerDiv">
+                <div class="msgBox">
+                    <p id="lineZero">Press Start to begin the Download.</p><p id="lineOne"></p>
+                </div>
+                <div id="progressBarArea">
+                    <progress id="progressBar" min="0" max="134345" value="0"></progress><!--134345-->
+                </div>
+                <div class="msgBox2">
+                    <p id="lineTwo"></p><p id="lineThree"></p><p id="lineFour"></p>
+                </div>
+                <div id="buttonSection">
+                    <button class="buttonClass" type="button" role="button" onclick="download()" id="btn-button" download><i class="fa fa-download" Unicode="f019"></i>Start Download</button>
+                    <button class="buttonClass" style="display: none;" type="button" role="button" onclick="stop()" id="btn-button" stop><i class="fa fa-stop-circle-o" Unicode="f28e"></i>Stop</button>
+                    <button class="buttonClass" style="display: none;" type="button" role="button" onclick="resume()" id="btn-button" resume><i class="fa fa-play-circle-o" Unicode="f01d"></i>Resume</button>
+                    <button class="buttonClass" style="display: none;" type="button" role="button" onclick="pause()" id="btn-button" pause><i class="fa fa-pause-circle-o" Unicode="f28c"></i>Pause</button>
+                    <button class="buttonClass" style="display: none;" type="button" role="button" onclick="download()" id="btn-button" download><i class="fa fa-refresh" Unicode="f021"></i>Redownload\Restart\Resume</button>
+                </div>
+            </div>
+        </section>
+        <style>
+            html,body{
+                background-color: rgb(0,0,0);
+            }
+            section{
+                width: 300px;
+                border: 1px solid black;
+                border-radius: 5px;
+                text-align: center;
+                margin: auto;
+                font-family: arial;
+                background-color: rgb(64,64,64);
+                color: white;
+            }
+            #btn-button{
+                display: inline-block;
+                font-weight: 400;
+                vertical-align: middle;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+                border: 1px solid transparent;
+                padding: 0.375rem 0.75rem;
+                font-size: 1rem;
+                line-height: 1.5;
+                border-radius: 0.28rem;
+                color: #fff;
+                background-color: #28a745;
+                cursor: pointer;
+                border-color: #28a745;
+                transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+            }
+            #btn-button:hover{
+                color: #fff;
+                background-color: #218838;
+                border-color: #1e7e34;
+            }
+            #progressBar{
+                width: 90%;
+                height: 35px;
+                background-color:#FFFFFF;
+            }
+            progress::-webkit-progress-bar{
+                background-color: #FFFFFF;
+                border: 1px groove white;
+            }
+            progress::-webkit-progress-value{
+            
+            }
+            #innerDiv{
+                padding: 2px;
+            }
+            .msgBox{
+                padding-left: 10px;
+                padding-right: 10px;
+                padding-top: 5px;
+                font-size: 12px;
+            }
+            #progressBarArea, #buttonSection{
+                padding: 2px;
+                margin: auto;
+            }
+
+            .msgBox2{
+                font-size: 12px;
+                padding-left: 10px;
+                padding-right: 10px;
+                /*font-weight: bold;*/
+            }
+            
+            .buttonClass{
+                padding-right:3px;
+            }
+
+            #lineZero{
+                display: inline-block;
+                float: left;
+                text-align: left;
+                font-weight: bold;
+                margin: 0;
+                padding: 0;
+            }
+            #lineOne{
+                margin: 0;
+                padding: 0;
+                display: inline-block;
+                float: right;
+                text-align: right;
+                font-weight: bold;
+                visibility: hidden;
+            }
+
+            #progressBar{
+
+                height: 15px;
+                width: 95%;
+                margin: auto;
+
+            }
+
+            progress[value]{
+                -webkit-appearance: none;
+                appearance: none;
+                border: none;
+                height: 10px;
+            }
+
+            progress[value]::-webkit-progress-bar{
+                background-color: #000000;
+                border-radius: 3px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.25) inset;
+            }
+
+            progress[value]::-webkit-progress-value{
+                position: relative;
+                background-size: 28px 15px, 100% 100%, 100% 100%;
+                border-radius: 2px;
+
+                animation: animate-stripes 5s linear infinite;
+            }
+
+            @keyframes animate-stripes {
+                0%{
+                    background-position: 0px 0;
+                }
+                100%{
+                    background-position: -100px 0;
+                }
+            }
+
+            progress[value]::-webkit-progress-value:after{
+
+                content: '';
+                position: absolute;
+                width: 5px; height: 5px;
+                top: 7px; right:7px;
+                background-color: white;
+                border-radius: 100%;
+
+            }
+
+            progress[value]::-moz-progress-bar{
+                background-image: -moz-linear-gradient(135deg,transparent,transparent 33%,rgb(0,0,0,0.1) 33%,rgb(0,0,0,0.1) 66%, transparent 66%), -moz-linear-gradient( top, rgb(255,255,255,0.25),rgb(0,0,0,0.2)),-moz-linear-gradient(left,#005000,#00d000);
+                background-size: 27px 15px, 100% 100%, 100% 100%;
+                border-radius: 2px;
+            }
+
+            progress{
+
+                background-color: white;
+                border-radius: 3px;
+                box-shadow: 0 2px 3px rgb(0,0,0,0.5) inset;
+                width: 100%; height:20px;
+
+            }
+
+            #progressBar::-webkit-progress-value{
+                background-image: -webkit-linear-gradient(135deg,transparent,transparent 33%,rgb(0,0,0,0.1) 33%,rgb(0,0,0,0.1) 66%, transparent 66%), -webkit-linear-gradient( top, rgb(255,255,255,0.25),rgb(0,0,0,0.2)),-webkit-linear-gradient(left,#005000,#00d000);
+            }
+
+            #lineTwo{
+                margin: 0;
+                padding: 0;
+                display: inline-block;
+                float: left;
+                text-align: left;
+                visibility: hidden;
+            }
+
+            #lineThree{
+                margin: 0;
+                padding: 0;
+                display: inline-block;
+                text-align: center;
+                visibility: hidden;
+            }
+
+            #lineFour{
+                margin: 0;
+                padding: 0;
+                display: inline-block;
+                float: right;
+                text-align: right;
+                visibility: hidden;
+            }
+        </style>
+        <script>
+            console.log("A WORKING DOWNLOAD");
+            console.log("A WORKING DOWNLOAD");
+            var number = 100;
+            var range;
+            var directionArray = [0,1]; // 0 being add, 1 being subtract
+
+            var lineZero = document.getElementById("lineZero"); // "Downloading.." (top left side)
+            var lineOne = document.getElementById("lineOne"); // "x%" (top right side)
+            var lineTwo = document.getElementById("lineTwo"); // "yMB/xMB" (bottom left side)
+            var lineThree = document.getElementById("lineThree"); // "x/sec" (bottom middle)
+            var lineFour = document.getElementById("lineFour"); // "x mins y secs" (bottom right side)
+
+            var testArray;
+            var testArray2;
+            var testArray3;
+            var byteSymbol; // variable for the symbol of data (in kb, mb, etc)
+            var displayNumber; //placeholder variable to display the current download speed
+            var displayProgressValue; //placeholder variable to display the current progress shown on the progress bar
+            var displayProgressMax; // placeholder variable to display the max value of the progress bar
+            var timeLeft; // variable to calculate the time left on the download
+
+            var tempNumber;
+
+            var progressBar = document.getElementById("progressBar");
+
+            var anInterval; // variable for the interval so we can activate and stop it when we please
+
+            var buttonClass = document.getElementsByClassName("buttonClass"); //grouping class for the buttons
+
+            function interval(){
+
+                anInterval = setInterval(
+                        function(){
+
+                            prevNumber();
+
+                            range = (Math.floor(Math.random()*50)+1); // Random range between 1 and 50 inclusive
+                            direction = Math.floor(Math.random()*directionArray.length);
+                            if(direction == 0 || number < 50 || previousNumber < 50){ //positive
+                                number = previousNumber + range;
+                            } else if (direction == 1){ // negative
+                                number = previousNumber - range;
+                            }
+                            progressBar.value = progressBar.value + number;
+                            timeLeft = Math.round((progressBar.max-progressBar.value)/(60*number)) + " mins " + Math.round((((progressBar.max-progressBar.value)/(60*number))%1)*60,4) + " secs";
+                            byteSize();
+                            displayNumber = testArray2[0];
+                            displayProgressValue = testArray2[1];
+                            displayProgressMax = testArray2[2];
+
+                            //lineThree.innerHTML = "File Size: " +  displayProgressMax;
+
+                            if (progressBar.value >= progressBar.max){
+                                lineTwo.innerHTML = displayProgressValue + "/" + displayProgressValue + " " + Math.round((progressBar.value/progressBar.max)*100) + "%";
+                                lineFour.innerHTML = "";
+
+                                buttonClass[1].style.display = "none";
+                                buttonClass[3].style.display = "none";
+
+                                lineZero.style.visibility = "visible";
+                                lineTwo.style.visibility = "hidden";
+                                lineThree.style.visibility = "hidden";
+                                lineFour.style.visibility = "hidden";
+                                lineOne.style.visibility = "hidden";
+
+                                lineZero.innerHTML = "Your download has finished.";
+                                clearInterval(anInterval);
+
+                                return;
+                            } else {
+                                lineZero.innerHTML = "Downloading...";
+                                lineOne.innerHTML = Math.round((progressBar.value/progressBar.max)*100) + "%";
+                                lineTwo.innerHTML = displayProgressValue+"/"+displayProgressMax;
+                                lineThree.innerHTML = displayNumber;
+                                lineFour.innerHTML = timeLeft;
+                            }
+                        }, 1000);
+            }
+
+            function download(){
+
+                buttonClass[0].style.display = "none";
+                buttonClass[1].style.display = "inline";
+                buttonClass[3].style.display = "inline";
+                buttonClass[4].style.display = "none";
+
+                lineZero.style.visibility = "visible";
+                lineOne.style.visibility = "visible";
+                lineTwo.style.visibility = "visible";
+                lineThree.style.visibility = "visible";
+                lineFour.style.visibility = "visible";
+                
+                interval();
+
+            function move() {
+                if (value >= 100) {
+                alert("Successfuly Downloaded!!");
+                value = 0;
+                clearInterval(time);
+                }
+                else {
+                value += 1;
+                bar.value = value;
+                percentage.innerText = value;
+                }
+            }}
+            
+            function stop(){
+
+                buttonClass[1].style.display = "none";
+                buttonClass[2].style.display = "none";
+                buttonClass[3].style.display = "none";
+                buttonClass[4].style.display = "inline";
+
+                lineZero.style.visibility = "visible";
+                lineOne.style.visibility = "hidden";
+                lineTwo.style.visibility = "hidden";
+                lineThree.style.visibility = "hidden";
+                lineFour.style.visibility = "hidden";
+
+                clearInterval(anInterval);
+                lineZero.innerHTML = "The Download has been stopped";
+            }
+
+            function resume(){
+                buttonClass[2].style.display = "none";
+                buttonClass[3].style.display = "inline";
+
+                lineZero.style.visibility = "visible";
+                lineOne.style.visibility = "visible";
+                lineTwo.style.visibility = "visible";
+                lineThree.style.visibility = "visible";
+                lineFour.style.visibility = "visible";
+                lineZero.innerHTML = "Downloading...";
+
+                interval();
+            }
+
+            function pause(){
+                buttonClass[3].style.display = "none";
+                buttonClass[2].style.display = "inline";
+
+                lineZero.style.visibility = "visible";
+                lineOne.style.visibility = "visible";
+                lineTwo.style.visibility = "hidden";
+                lineThree.style.visibility = "hidden";
+                lineFour.style.visibility = "hidden";
+                
+
+                clearInterval(anInterval);
+                lineZero.innerHTML = "The Download has been paused";
+            }
+
+            function prevNumber(){
+                previousNumber = number;
+            }
+
+            function byteSize(){
+                testArray = [number,progressBar.value,progressBar.max];
+                testArray2 = [displayNumber,displayProgressValue,displayProgressMax];
+                testArray3 = ["/Sec","",""];
+
+                for(var i=0;i<3;i++){
+                    if(testArray[i] < 1024){
+                        byteSymbol = "KB"+testArray3[i];
+                        testArray2[i] = testArray[i] + " " + byteSymbol;
+                    } else if (testArray[i] >= 1024 && testArray[i] < (1024*1024)){
+                        byteSymbol = "MB"+testArray3[i];
+                        testArray2[i] = Math.round((testArray[i]/1024)*100)/100 + " " + byteSymbol;
+                    } else if (testArray[i] >= (1024*1024)){
+                        byteSymbol = "GB"+testArray3[i];
+                        testArray2[i] = Math.round((testArray[i]/(1024*1024))*100)/100 + " " + byteSymbol;
+                    } else {
+                        byteSymbol = "B/S";
+                    }
+
+                }
+
+            }
+
+            /*
+                https://css-tricks.com/html5-progress-element/
+            */
+        </script>
+    </body>
+</html>
